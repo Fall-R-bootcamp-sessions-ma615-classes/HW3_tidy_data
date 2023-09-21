@@ -1,0 +1,180 @@
+---
+title: "HW3_tidy_data_instructions"
+author: "Aidan O'Hara"
+date: "2023-09-20"
+output: pdf_document
+header-includes:
+  - \usepackage{float}
+  - \usepackage{subfig}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(kableExtra)
+```
+
+### Instructions
+
+Tidy the following tables from the Hadley Wickham, Tidy Data article into the given tidy (and melt) forms.
+
+### PREG
+
+The starter code will the generate the raw data needed for the `preg` set. Use this as a good reminder that small portions of a given dataset can be used to first develop the tidy form before attempting to tidy the dataset at large.
+
+```{=tex}
+\begin{table}[H]
+  \centering
+  \input{data/preg-raw-1.tex}
+  \caption{Typical presentation dataset.}
+  \label{tbl:preg-raw-1}
+\end{table}
+```
+```{=tex}
+\begin{table}[H]
+  \centering
+  \input{data/preg-tidy.tex}
+  \caption{The same data as in Table~\ref{tbl:preg-raw-1} but with variables in columns and observations in rows.}
+  \label{tbl:preg-tidy}
+\end{table}
+```
+\newpage
+
+### PEW
+
+This next table gets much more involved. You will need to coerce some strings into the specified forms given in the tidy table. 
+
+```{=tex}
+\begin{table}[H]
+  \centering
+  \input{data/pew-raw.tex}
+  \caption{The first ten rows of data on income and religion from the Pew Forum. Three columns, \texttt{\$75-100k}, \texttt{\$100-150k} and \texttt{>150k}, have been omitted} 
+  \label{tbl:pew-raw}
+\end{table}
+```
+You will need to trim the `reltrad` column of `pew` from:
+
+`[1]  Evangelical Protestant Churches`\
+`[2]  Mainline Protestant Churches`\
+`[3]  Unaffiliated`\
+`[4]  Jewish`\
+`[5]  Don’t know/refused (no information on religious affiliation)`\
+`[6]  Other Faiths`\
+`[7]  Historically Black Protestant Churches`\
+`[8]  Jehovah's Witness`\
+`[9]  Catholic`\
+`[10]  Buddhist`\
+`[11]  Mormon`\
+`[12]  Muslim`\
+`[13]  Hindu`\
+`[14]  Other Christian`\
+`[15]  Orthodox`\
+`[16]  Other World Religions`\
+
+to:
+
+`[1] Evangelical Prot        Mainline Prot           Unaffiliated`\
+`[4] Jewish                  Don’t know/refused      Other Faiths`\
+`[7] Historically Black Prot Jehovah's Witness       Atheist`\
+`[10] Agnostic                Catholic                Buddhist`\
+`[13] Mormon                  Muslim                  Hindu`\
+`[16] Other Christian         Orthodox                Other World Religions`\
+
+and replace income values:
+
+`[1] 75 to under $100,000      20 to under $30,000       30 to under $40,000`\
+`[4] Less than $10,000         50 to under $75,000       $150,000 or more`\
+`[7] 40 to under $50,000       Don't know/Refused (VOL.) 100 to under $150,000`\
+`[10] 10 to under $20,000`\
+
+with:
+
+`[1] "$75-100k"           "$20-30k"      "$30-40k"       "<$10k"`\
+`[5] "$50-75k"            ">150k"        "$40-50k"       "Don't know/refused"`\
+`[9] "$100-150k"          "$10-20k"`\
+
+using the `stringr` library and dataframe column operations.
+
+Once your strings are setup, factor the incomes, and use `count` to create the tidy version.
+
+
+```{=tex}
+\begin{table}[H]
+  \centering
+  \input{data/pew-clean.tex}
+  \caption{The first ten rows of the tidied Pew survey dataset on income and religion. The \texttt{column} has been renamed to \texttt{income}, and \texttt{value} to \texttt{freq}.}
+  \label{tbl:pew-clean}
+\end{table}
+```
+\newpage
+
+### TB
+
+For `tb` starter code will take care of some first-step, minor, tidy-ups. Next, use `gather` to construct the molten version, before doing some additional clean-up/ rearrangement to reach the tidy format.
+
+```{=tex}
+\begin{table}[H]
+  \centering
+  \input{data/tb-raw.tex}
+  \caption{Original TB dataset. Corresponding to each `m' column for males, there is also an `f' column for females, \texttt{f1524}, \texttt{f2534} and so on. These are not shown to conserve space. Note the mixture of 0s and missing values (---). This is due to the data collection process and the distinction is important for this dataset.}
+  \label{tbl:tb-raw}
+\end{table}
+```
+```{=tex}
+\begin{table}[H]
+  \centering
+  \subfloat[Molten data]{\label{tbl:tb-molten}\input{data/tb-clean-1.tex}}%
+  \hspace{2em}%
+  \subfloat[Tidy data]{\label{tbl:tb-tidy}\input{data/tb-clean-2.tex}}
+  
+  \caption{Tidying the TB dataset requires first melting, and then splitting the \texttt{column} column into two variables: \texttt{sex} and \texttt{age}.}
+  \label{tbl:tb-clean}
+\end{table}
+```
+\newpage
+
+### WEATHER
+
+The weather data, being particularly fickle, uses a custom `read`  method provided in your starter code. Review the function and attempt to use the, base R, `read.fwf()` function to read in the raw data. What's the difference? Can `read.fwf()` be used instead?
+
+
+```{=tex}
+\begin{table}[H]
+  \centering
+  \input{data/weather-raw.tex}
+  \caption{Original weather dataset.  There is a column for each possible day in the month.  Columns \texttt{d9} to \texttt{d31} have been omitted to conserve space.}
+  \label{tbl:weather-raw}
+\end{table}
+```
+
+After reading in the raw data you'll need to do the following to create the above table and melt the data:
+
+-   Subset for just the year 2010, and only elements `"TMAX"` and `"TMIN"` 
+-   Remove all columns besides `id`, `year`, `month`, `element`, and columns beginning with `value` 
+-   Remove the extra `0`s from the `id` column 
+-   Change the column names beginning with `value`, ex `value_1`, to `d`, example `d1` 
+-   Divide the values in the new `d` columns by 10 
+-   Finally, make values of the `element` column lowercase
+
+A quick `gather()` and voila, you've made `melt_weather`.
+
+Translate the new `variable` column from `dn` to just `n`, and convert the year, month, and day data into a single column of dates.  Use `as.date()` and `ISOdate()` accordingly.
+
+Don't forget to select and arrange your columns to match the table below.
+
+One more thing to do now, use a tidyr pivot to construct the final `tidy_weather` dataframe!
+
+
+```{=tex}
+\begin{table}[H]
+  \centering
+  \subfloat[Molten data]{\label{tbl:weather-molten}\input{data/weather-clean-1.tex}}%
+  \hspace{2em}%
+  \subfloat[Tidy data]{\label{tbl:weather-tidy}\input{data/weather-clean-2.tex}}
+  
+  \caption{(a) Molten weather dataset. This is almost tidy, but instead of values, the \texttt{element} column contains names of variables. Missing values are dropped to conserve space. (b) Tidy weather dataset. Each row represents the meteorological measurements for a single day. There are two measured variables, minimum (\texttt{tmin}) and maximum (\texttt{tmax}) temperature; all other variables are fixed.}
+  \label{tbl:weather-clean}
+\end{table}
+```
+\newpage
+
+### STRAWBERRY
