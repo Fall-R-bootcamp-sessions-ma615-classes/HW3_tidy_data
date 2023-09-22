@@ -41,7 +41,7 @@ The starter code will the generate the raw data needed for the `preg` set. Use t
 
 ### PEW
 
-This next table gets much more involved. You will need to coerce some strings into the specified forms given in the tidy table. 
+This next table gets much more involved.
 
 ```{=tex}
 \begin{table}[H]
@@ -51,7 +51,10 @@ This next table gets much more involved. You will need to coerce some strings in
   \label{tbl:pew-raw}
 \end{table}
 ```
-You will need to trim the `reltrad` column of `pew` from:
+
+You will need to coerce some strings into the specified forms present in the tidy table. 
+
+Specifically, you will need to trim the `reltrad` column of `pew` from:
 
 `[1]  Evangelical Protestant Churches`\
 `[2]  Mainline Protestant Churches`\
@@ -94,7 +97,7 @@ with:
 
 using the `stringr` library and dataframe column operations.
 
-Once your strings are setup, factor the incomes, and use `count` to create the tidy version.
+Once your strings are setup, factor the incomes, and use `count()` to create the tidy version.
 
 
 ```{=tex}
@@ -109,7 +112,7 @@ Once your strings are setup, factor the incomes, and use `count` to create the t
 
 ### TB
 
-For `tb` starter code will take care of some first-step, minor, tidy-ups. Next, use `gather` to construct the molten version, before doing some additional clean-up/ rearrangement to reach the tidy format.
+For `tb`, starter code will take care of the first-step, minor, tidy-ups. Next, use `pivot_longer` to construct the molten version, before doing some additional clean-up/ rearrangement to reach the tidy format.
 
 ```{=tex}
 \begin{table}[H]
@@ -155,7 +158,7 @@ After reading in the raw data you'll need to do the following to create the abov
 -   Divide the values in the new `d` columns by 10 
 -   Finally, make values of the `element` column lowercase
 
-A quick `gather()` and voila, you've made `melt_weather`.
+A quick `pivot_longer()` and voila, you've made `melt_weather`.
 
 Translate the new `variable` column from `dn` to just `n`, and convert the year, month, and day data into a single column of dates.  Use `as.date()` and `ISOdate()` accordingly.
 
@@ -175,6 +178,4 @@ One more thing to do now, use a tidyr pivot to construct the final `tidy_weather
   \label{tbl:weather-clean}
 \end{table}
 ```
-\newpage
 
-### STRAWBERRY
