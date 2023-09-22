@@ -1,7 +1,6 @@
 nameOfCoder <- "Your Name Here"
 
 library(foreign) #read.spss
-
 library(stringr)
 library(dplyr)
 library(tidyr)

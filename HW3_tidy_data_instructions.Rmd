@@ -17,6 +17,17 @@ library(kableExtra)
 
 Tidy the following tables from the Hadley Wickham, Tidy Data article into the given tidy (and melt) forms.
 
+Only use the libraries included in the starter code: 
+
+```{r eval = F}
+library(foreign) #read.spss
+library(stringr)
+library(dplyr)
+library(tidyr)
+```
+
+Use the included `dim(df) == c(x,y)` tests to check you have the right size data frame. 
+
 ### PREG
 
 The starter code will the generate the raw data needed for the `preg` set. Use this as a good reminder that small portions of a given dataset can be used to first develop the tidy form before attempting to tidy the dataset at large.
